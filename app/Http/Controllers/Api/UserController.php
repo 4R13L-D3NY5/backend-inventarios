@@ -49,8 +49,8 @@ class UserController extends Controller
             'usuario'     => 'required|string|max:100|unique:users,usuario',
             'email'       => 'nullable|email|max:255|unique:users,email',
             'password'    => 'required|string|min:6',
-            'rol_id'      => 'required|exists:roles,id',
-            'personal_id' => 'nullable|exists:personal,id',
+            'rol_id'      => 'required|exists:rols,id',
+            'personal_id' => 'nullable|exists:personals,id',
             'estado'      => 'boolean',
         ]);
 
@@ -87,8 +87,8 @@ class UserController extends Controller
                 'max:255',
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
-            'rol_id'      => 'required|exists:roles,id',
-            'personal_id' => 'nullable|exists:personal,id',
+            'rol_id'      => 'required|exists:rols,id',
+            'personal_id' => 'nullable|exists:personals,id',
             'estado'      => 'boolean',
             'password'    => 'nullable|string|min:6',
         ]);

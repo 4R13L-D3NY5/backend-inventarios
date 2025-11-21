@@ -1,0 +1,413 @@
+{
+    "info": {
+        "_postman_id": "proveedor-module-2025",
+        "name": "UNITEPC - Módulo Proveedores",
+        "description": "Colección de endpoints para el módulo de gestión de proveedores del sistema de inventarios UNITEPC",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Listar Proveedores",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores?per_page=15&sort_by=nombre&sort_order=asc",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ],
+                    "query": [
+                        {
+                            "key": "per_page",
+                            "value": "15",
+                            "description": "Cantidad de registros por página"
+                        },
+                        {
+                            "key": "sort_by",
+                            "value": "nombre",
+                            "description": "Campo para ordenar"
+                        },
+                        {
+                            "key": "sort_order",
+                            "value": "asc",
+                            "description": "Dirección del ordenamiento (asc/desc)"
+                        },
+                        {
+                            "key": "buscar",
+                            "value": "",
+                            "description": "Término de búsqueda",
+                            "disabled": true
+                        },
+                        {
+                            "key": "activo",
+                            "value": "1",
+                            "description": "Filtrar por estado activo (0/1)",
+                            "disabled": true
+                        }
+                    ]
+                },
+                "description": "Obtiene el listado paginado de proveedores con opciones de búsqueda y filtrado"
+            },
+            "response": []
+        },
+        {
+            "name": "Buscar Proveedores",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores?buscar=Química",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ],
+                    "query": [
+                        {
+                            "key": "buscar",
+                            "value": "Química",
+                            "description": "Busca en nombre, NIT y email"
+                        }
+                    ]
+                },
+                "description": "Busca proveedores por nombre, NIT o email"
+            },
+            "response": []
+        },
+        {
+            "name": "Filtrar Proveedores Activos",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores?activo=1",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ],
+                    "query": [
+                        {
+                            "key": "activo",
+                            "value": "1",
+                            "description": "1 para activos, 0 para inactivos"
+                        }
+                    ]
+                },
+                "description": "Filtra proveedores por estado activo/inactivo"
+            },
+            "response": []
+        },
+        {
+            "name": "Crear Proveedor",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nombre\": \"Laboratorios Científicos SAC\",\n    \"nit\": \"1357924680\",\n    \"telefono\": \"+591 78123456\",\n    \"email\": \"ventas@labcientificos.bo\",\n    \"direccion\": \"Av. 6 de Agosto #1234, La Paz\",\n    \"observaciones\": \"Proveedor nuevo de equipos especializados\",\n    \"activo\": true\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ]
+                },
+                "description": "Crea un nuevo proveedor con todos los campos"
+            },
+            "response": []
+        },
+        {
+            "name": "Crear Proveedor (Sin NIT)",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nombre\": \"Proveedor Internacional XYZ\",\n    \"telefono\": \"+1 555-0123\",\n    \"email\": \"contact@xyz-international.com\",\n    \"direccion\": \"123 Main Street, USA\",\n    \"activo\": true\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ]
+                },
+                "description": "Crea un proveedor sin NIT (campo opcional)"
+            },
+            "response": []
+        },
+        {
+            "name": "Ver Proveedor",
+            "request": {
+                "method": "GET",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores/1",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores",
+                        "1"
+                    ]
+                },
+                "description": "Obtiene los detalles de un proveedor específico por ID"
+            },
+            "response": []
+        },
+        {
+            "name": "Actualizar Proveedor",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nombre\": \"Química del Sur SRL - Actualizado\",\n    \"nit\": \"1234567890\",\n    \"telefono\": \"+591 78945612\",\n    \"email\": \"contacto@quimicasur.com\",\n    \"direccion\": \"Av. América #123, La Paz - Bolivia\",\n    \"observaciones\": \"Proveedor principal de reactivos químicos - Actualizado\",\n    \"activo\": true\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores/1",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores",
+                        "1"
+                    ]
+                },
+                "description": "Actualiza los datos de un proveedor existente"
+            },
+            "response": []
+        },
+        {
+            "name": "Desactivar Proveedor",
+            "request": {
+                "method": "PUT",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nombre\": \"Química del Sur SRL\",\n    \"nit\": \"1234567890\",\n    \"telefono\": \"+591 78945612\",\n    \"email\": \"contacto@quimicasur.com\",\n    \"direccion\": \"Av. América #123, La Paz\",\n    \"observaciones\": \"Proveedor principal de reactivos químicos\",\n    \"activo\": false\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores/1",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores",
+                        "1"
+                    ]
+                },
+                "description": "Desactiva un proveedor cambiando el campo activo a false"
+            },
+            "response": []
+        },
+        {
+            "name": "Eliminar Proveedor (Soft Delete)",
+            "request": {
+                "method": "DELETE",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    }
+                ],
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores/8",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores",
+                        "8"
+                    ]
+                },
+                "description": "Elimina lógicamente un proveedor (soft delete)"
+            },
+            "response": []
+        },
+        {
+            "name": "Validación - Crear sin Nombre",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"telefono\": \"+591 78123456\",\n    \"direccion\": \"Av. Test #123\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ]
+                },
+                "description": "Prueba validación: nombre es requerido"
+            },
+            "response": []
+        },
+        {
+            "name": "Validación - Email Inválido",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nombre\": \"Test Proveedor\",\n    \"telefono\": \"+591 78123456\",\n    \"email\": \"email-invalido\",\n    \"direccion\": \"Av. Test #123\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ]
+                },
+                "description": "Prueba validación: formato de email inválido"
+            },
+            "response": []
+        },
+        {
+            "name": "Validación - Nombre Duplicado",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Accept",
+                        "value": "application/json"
+                    },
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"nombre\": \"Química del Sur SRL\",\n    \"telefono\": \"+591 78123456\",\n    \"direccion\": \"Av. Test #123\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/proveedores",
+                    "host": [
+                        "{{base_url}}"
+                    ],
+                    "path": [
+                        "api",
+                        "proveedores"
+                    ]
+                },
+                "description": "Prueba validación: nombre debe ser único"
+            },
+            "response": []
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        },
+        {
+            "key": "token",
+            "value": "",
+            "type": "string"
+        }
+    ]
+}

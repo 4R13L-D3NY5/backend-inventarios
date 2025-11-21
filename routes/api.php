@@ -5,6 +5,11 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\RolController;
 use App\Http\Controllers\Api\PermisoController;
+use App\Http\Controllers\ProveedorController;
+use App\Http\Controllers\CategoriaController;
+use App\Http\Controllers\SubcategoriaController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\HistorialPrecioController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -23,4 +28,23 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Permisos
     Route::apiResource('permisos', PermisoController::class);
+
+    // Proveedores
+    Route::apiResource('proveedores', ProveedorController::class);
+
+    // Categorías
+    Route::apiResource('categorias', CategoriaController::class);
+
+    // Subcategorías
+    Route::apiResource('subcategorias', SubcategoriaController::class);
+
+    // Ítems
+    Route::apiResource('items', ItemController::class);
+
+    // Historial de Precios
+    Route::apiResource('historial-precios', HistorialPrecioController::class);
+    
+    // Rutas especiales para comparativa y tendencia
+    Route::get('items/{item}/comparativa-proveedores', [HistorialPrecioController::class, 'comparativa']);
+    Route::get('items/{item}/tendencia-precios', [HistorialPrecioController::class, 'tendencia']);
 });
