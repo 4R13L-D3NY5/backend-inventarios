@@ -10,6 +10,11 @@ use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\SubcategoriaController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\HistorialPrecioController;
+use App\Http\Controllers\SolicitudController;
+use App\Http\Controllers\AlmacenController;
+use App\Http\Controllers\InventarioController;
+use App\Http\Controllers\MovimientoInventarioController;
+use App\Http\Controllers\PrestamoController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -47,4 +52,49 @@ Route::middleware('auth:sanctum')->group(function () {
     // Rutas especiales para comparativa y tendencia
     Route::get('items/{item}/comparativa-proveedores', [HistorialPrecioController::class, 'comparativa']);
     Route::get('items/{item}/tendencia-precios', [HistorialPrecioController::class, 'tendencia']);
+
+    // Solicitudes
+    Route::apiResource('solicitudes', SolicitudController::class);
+    
+    // Rutas de aprobación de solicitudes
+    Route::post('solicitudes/{id}/aprobar-subalmacen', [SolicitudController::class, 'aprobarSubalmacen']);
+    Route::post('solicitudes/{id}/aprobar-almacen', [SolicitudController::class, 'aprobarAlmacen']);
+    Route::post('solicitudes/{id}/aprobar-adquisicion', [SolicitudController::class, 'aprobarAdquisicion']);
+    Route::post('solicitudes/{id}/denegar', [SolicitudController::class, 'denegar']);
+    
+    // Consultas especiales de solicitudes
+    Route::get('solicitudes-pendientes/mis-pendientes', [SolicitudController::class, 'pendientes']);
+    Route::get('solicitudes-historial/completadas', [SolicitudController::class, 'historial']);
+
+    // Almacenes
+    Route::apiResource('almacenes', AlmacenController::class);
+    Route::get('almacenes/{id}/stock', [AlmacenController::class, 'stockPorAlmacen']);
+    Route::get('almacenes/{id}/movimientos', [AlmacenController::class, 'movimientos']);
+
+    // Inventario
+    Route::get('inventario', [InventarioController::class, 'index']);
+    Route::get('inventario/stock-detallado', [InventarioController::class, 'stockDetallado']);
+    Route::get('inventario/por-categoria', [InventarioController::class, 'stockPorCategoria']);
+    Route::get('inventario/bajo-stock', [InventarioController::class, 'itemsBajoStock']);
+    Route::get('inventario/valoracion', [InventarioController::class, 'valoracionInventario']);
+    Route::get('inventario/kardex/{itemId}', [InventarioController::class, 'kardex']);
+
+    // Movimientos de Inventario
+    Route::get('movimientos-inventario', [MovimientoInventarioController::class, 'index']);
+    Route::get('movimientos-inventario/{id}', [MovimientoInventarioController::class, 'show']);
+    Route::post('movimientos-inventario/entrada', [MovimientoInventarioController::class, 'registrarEntrada']);
+    Route::post('movimientos-inventario/salida', [MovimientoInventarioController::class, 'registrarSalida']);
+    Route::post('movimientos-inventario/traspaso', [MovimientoInventarioController::class, 'registrarTraspaso']);
+    Route::post('movimientos-inventario/ajuste', [MovimientoInventarioController::class, 'registrarAjuste']);
+
+    // Préstamos
+    Route::apiResource('prestamos', PrestamoController::class);
+    Route::get('prestamos/activos/lista', [PrestamoController::class, 'activos']);
+    Route::get('prestamos/vencidos/lista', [PrestamoController::class, 'vencidos']);
+    Route::get('prestamos/devoluciones/hoy', [PrestamoController::class, 'devolucionesHoy']);
+    Route::get('prestamos/historial/completo', [PrestamoController::class, 'historial']);
+    Route::post('prestamos/{id}/devolver', [PrestamoController::class, 'devolver']);
+    Route::post('prestamos/{id}/cancelar', [PrestamoController::class, 'cancelar']);
+    Route::post('prestamos/{id}/recordatorio', [PrestamoController::class, 'enviarRecordatorio']);
+    Route::post('prestamos/verificar-vencimientos', [PrestamoController::class, 'verificarVencimientos']);
 });

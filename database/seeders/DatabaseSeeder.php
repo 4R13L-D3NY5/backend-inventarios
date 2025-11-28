@@ -14,6 +14,12 @@ use App\Models\Subcategoria;
 use App\Models\Item;
 use App\Models\ItemUnidad;
 use App\Models\HistorialPrecio;
+use App\Models\Laboratorio;
+use App\Models\Ubicacion;
+use App\Models\Almacen;
+use App\Models\Inventario;
+use App\Models\MovimientoInventario;
+use App\Models\Prestamo;
 
 class DatabaseSeeder extends Seeder
 {
@@ -217,42 +223,42 @@ class DatabaseSeeder extends Seeder
             ],
         ];
 
-        // foreach ($proveedores as $proveedor) {
-        //     Proveedor::create($proveedor);
-        // }
+        foreach ($proveedores as $proveedor) {
+            Proveedor::create($proveedor);
+        }
 
-        // // 5. Categorías
-        // $categorias = [
-        //     ['nombre' => 'Reactivos Químicos', 'descripcion' => 'Sustancias químicas para análisis y experimentos', 'activo' => true],
-        //     ['nombre' => 'Equipos de Laboratorio', 'descripcion' => 'Instrumentos y equipos científicos', 'activo' => true],
-        //     ['nombre' => 'Material de Vidrio', 'descripcion' => 'Cristalería y material de vidrio', 'activo' => true],
-        //     ['nombre' => 'Insumos Generales', 'descripcion' => 'Consumibles y materiales generales', 'activo' => true],
-        //     ['nombre' => 'Equipos de Cómputo', 'descripcion' => 'Computadoras y accesorios', 'activo' => true],
-        // ];
+        // 5. Categorías
+        $categorias = [
+            ['nombre' => 'Reactivos Químicos', 'descripcion' => 'Sustancias químicas para análisis y experimentos', 'activo' => true],
+            ['nombre' => 'Equipos de Laboratorio', 'descripcion' => 'Instrumentos y equipos científicos', 'activo' => true],
+            ['nombre' => 'Material de Vidrio', 'descripcion' => 'Cristalería y material de vidrio', 'activo' => true],
+            ['nombre' => 'Insumos Generales', 'descripcion' => 'Consumibles y materiales generales', 'activo' => true],
+            ['nombre' => 'Equipos de Cómputo', 'descripcion' => 'Computadoras y accesorios', 'activo' => true],
+        ];
 
-        // foreach ($categorias as $cat) {
-        //     Categoria::create($cat);
-        // }
+        foreach ($categorias as $cat) {
+            Categoria::create($cat);
+        }
 
-        // // 6. Subcategorías
-        // $subcategorias = [
-        //     ['categoria_id' => 1, 'nombre' => 'Ácidos', 'descripcion' => 'Ácidos inorgánicos y orgánicos', 'activo' => true],
-        //     ['categoria_id' => 1, 'nombre' => 'Bases', 'descripcion' => 'Bases y álcalis', 'activo' => true],
-        //     ['categoria_id' => 1, 'nombre' => 'Solventes', 'descripcion' => 'Solventes orgánicos', 'activo' => true],
-        //     ['categoria_id' => 2, 'nombre' => 'Microscopios', 'descripcion' => 'Microscopios ópticos y digitales', 'activo' => true],
-        //     ['categoria_id' => 2, 'nombre' => 'Pipetas', 'descripcion' => 'Pipetas automáticas y manuales', 'activo' => true],
-        //     ['categoria_id' => 2, 'nombre' => 'Balanzas', 'descripcion' => 'Balanzas analíticas y de precisión', 'activo' => true],
-        //     ['categoria_id' => 3, 'nombre' => 'Vasos y Beakers', 'descripcion' => 'Vasos de precipitado', 'activo' => true],
-        //     ['categoria_id' => 3, 'nombre' => 'Matraces', 'descripcion' => 'Matraces volumétricos y aforados', 'activo' => true],
-        //     ['categoria_id' => 4, 'nombre' => 'Guantes', 'descripcion' => 'Guantes de protección', 'activo' => true],
-        //     ['categoria_id' => 4, 'nombre' => 'Mascarillas', 'descripcion' => 'Mascarillas y protección respiratoria', 'activo' => true],
-        //     ['categoria_id' => 5, 'nombre' => 'Laptops', 'descripcion' => 'Computadoras portátiles', 'activo' => true],
-        //     ['categoria_id' => 5, 'nombre' => 'Accesorios', 'descripcion' => 'Mouse, teclados, etc.', 'activo' => true],
-        // ];
+        // 6. Subcategorías
+        $subcategorias = [
+            ['categoria_id' => 1, 'nombre' => 'Ácidos', 'descripcion' => 'Ácidos inorgánicos y orgánicos', 'activo' => true],
+            ['categoria_id' => 1, 'nombre' => 'Bases', 'descripcion' => 'Bases y álcalis', 'activo' => true],
+            ['categoria_id' => 1, 'nombre' => 'Solventes', 'descripcion' => 'Solventes orgánicos', 'activo' => true],
+            ['categoria_id' => 2, 'nombre' => 'Microscopios', 'descripcion' => 'Microscopios ópticos y digitales', 'activo' => true],
+            ['categoria_id' => 2, 'nombre' => 'Pipetas', 'descripcion' => 'Pipetas automáticas y manuales', 'activo' => true],
+            ['categoria_id' => 2, 'nombre' => 'Balanzas', 'descripcion' => 'Balanzas analíticas y de precisión', 'activo' => true],
+            ['categoria_id' => 3, 'nombre' => 'Vasos y Beakers', 'descripcion' => 'Vasos de precipitado', 'activo' => true],
+            ['categoria_id' => 3, 'nombre' => 'Matraces', 'descripcion' => 'Matraces volumétricos y aforados', 'activo' => true],
+            ['categoria_id' => 4, 'nombre' => 'Guantes', 'descripcion' => 'Guantes de protección', 'activo' => true],
+            ['categoria_id' => 4, 'nombre' => 'Mascarillas', 'descripcion' => 'Mascarillas y protección respiratoria', 'activo' => true],
+            ['categoria_id' => 5, 'nombre' => 'Laptops', 'descripcion' => 'Computadoras portátiles', 'activo' => true],
+            ['categoria_id' => 5, 'nombre' => 'Accesorios', 'descripcion' => 'Mouse, teclados, etc.', 'activo' => true],
+        ];
 
-        // foreach ($subcategorias as $subcat) {
-        //     Subcategoria::create($subcat);
-        // }
+        foreach ($subcategorias as $subcat) {
+            Subcategoria::create($subcat);
+        }
 
         // // 7. Ítems
         // $items = [
@@ -480,6 +486,70 @@ class DatabaseSeeder extends Seeder
         // foreach ($precios as $precio) {
         //     HistorialPrecio::create($precio);
         // }
+
+        // 10. Laboratorios
+        $laboratorios = [
+            ['nombre' => 'Laboratorio de Química', 'codigo' => 'LAB-QUI', 'descripcion' => 'Laboratorio de química general', 'activo' => true],
+            ['nombre' => 'Laboratorio de Física', 'codigo' => 'LAB-FIS', 'descripcion' => 'Laboratorio de física experimental', 'activo' => true],
+            ['nombre' => 'Laboratorio de Biología', 'codigo' => 'LAB-BIO', 'descripcion' => 'Laboratorio de biología y microbiología', 'activo' => true],
+            ['nombre' => 'Laboratorio de Cómputo', 'codigo' => 'LAB-COMP', 'descripcion' => 'Sala de computación', 'activo' => true],
+        ];
+
+        foreach ($laboratorios as $lab) {
+            Laboratorio::create($lab);
+        }
+
+        // 11. Ubicaciones
+        $ubicaciones = [
+            ['nombre' => 'Edificio A - Piso 1', 'codigo' => 'ED-A-P1', 'descripcion' => 'Primer piso edificio A', 'activo' => true],
+            ['nombre' => 'Edificio A - Piso 2', 'codigo' => 'ED-A-P2', 'descripcion' => 'Segundo piso edificio A', 'activo' => true],
+            ['nombre' => 'Edificio B - Piso 1', 'codigo' => 'ED-B-P1', 'descripcion' => 'Primer piso edificio B', 'activo' => true],
+            ['nombre' => 'Almacén Central', 'codigo' => 'ALM-CENTRAL', 'descripcion' => 'Almacén principal', 'activo' => true],
+        ];
+
+        foreach ($ubicaciones as $ubi) {
+            Ubicacion::create($ubi);
+        }
+
+        // 12. Almacenes
+        $almacenes = [
+            [
+                'nombre' => 'Almacén Central',
+                'codigo' => 'ALM-001',
+                'tipo' => 'principal',
+                'almacen_padre_id' => null,
+                'ubicacion_id' => 4,
+                'responsable_id' => 3,
+                'descripcion' => 'Almacén principal de la institución',
+                'activo' => true,
+            ],
+            [
+                'nombre' => 'Sub-Almacén Química',
+                'codigo' => 'SUB-QUI',
+                'tipo' => 'subalmacen',
+                'almacen_padre_id' => 1,
+                'ubicacion_id' => 1,
+                'responsable_id' => 2,
+                'descripcion' => 'Subalmacén del laboratorio de química',
+                'activo' => true,
+            ],
+            [
+                'nombre' => 'Sub-Almacén Física',
+                'codigo' => 'SUB-FIS',
+                'tipo' => 'subalmacen',
+                'almacen_padre_id' => 1,
+                'ubicacion_id' => 2,
+                'responsable_id' => 2,
+                'descripcion' => 'Subalmacén del laboratorio de física',
+                'activo' => true,
+            ],
+        ];
+
+        foreach ($almacenes as $alm) {
+            Almacen::create($alm);
+        }
+
+        $this->command->info('✅ Seeders completados: Usuarios, Proveedores, Categorías, Laboratorios, Ubicaciones y Almacenes');
 
     }
 }

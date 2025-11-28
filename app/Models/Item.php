@@ -27,12 +27,17 @@ class Item extends Model
         'nombre',
         'categoria_id',
         'subcategoria_id',
+        'laboratorio_destino_id',
+        'ubicacion_inicial_id',
         'marca',
         'modelo',
         'unidad_medida_base',
+        'stock_inicial',
+        'stock_minimo',
         'es_consumible',
         'es_peligroso',
         'descripcion',
+        'especificaciones_tecnicas',
         'activo',
     ];
 
@@ -42,6 +47,8 @@ class Item extends Model
      * @var array<string, string>
      */
     protected $casts = [
+        'stock_inicial' => 'decimal:2',
+        'stock_minimo' => 'decimal:2',
         'es_consumible' => 'boolean',
         'es_peligroso' => 'boolean',
         'activo' => 'boolean',
@@ -80,6 +87,22 @@ class Item extends Model
     public function historialPrecios()
     {
         return $this->hasMany(HistorialPrecio::class);
+    }
+
+    /**
+     * Relación con laboratorio de destino.
+     */
+    public function laboratorioDestino()
+    {
+        return $this->belongsTo(Laboratorio::class, 'laboratorio_destino_id');
+    }
+
+    /**
+     * Relación con ubicación inicial.
+     */
+    public function ubicacionInicial()
+    {
+        return $this->belongsTo(Ubicacion::class, 'ubicacion_inicial_id');
     }
 
     /**

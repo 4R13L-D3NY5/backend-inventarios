@@ -16,7 +16,7 @@ class ItemController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Item::with(['categoria', 'subcategoria']);
+        $query = Item::with(['categoria', 'subcategoria', 'laboratorioDestino', 'ubicacionInicial']);
 
         // Filtro por categoría
         if ($request->has('categoria_id')) {
@@ -69,12 +69,17 @@ class ItemController extends Controller
             'nombre' => 'required|string|max:255',
             'categoria_id' => 'required|exists:categorias,id',
             'subcategoria_id' => 'nullable|exists:subcategorias,id',
+            'laboratorio_destino_id' => 'nullable|exists:laboratorios,id',
+            'ubicacion_inicial_id' => 'nullable|exists:ubicaciones,id',
             'marca' => 'nullable|string|max:100',
             'modelo' => 'nullable|string|max:100',
             'unidad_medida_base' => 'required|string|max:20',
+            'stock_inicial' => 'required|numeric|min:0',
+            'stock_minimo' => 'required|numeric|min:0',
             'es_consumible' => 'boolean',
             'es_peligroso' => 'boolean',
             'descripcion' => 'nullable|string',
+            'especificaciones_tecnicas' => 'nullable|string|max:1000',
             'activo' => 'boolean',
             // Unidades de conversión (opcional)
             'unidades' => 'nullable|array',
@@ -87,7 +92,13 @@ class ItemController extends Controller
             'categoria_id.required' => 'La categoría es obligatoria.',
             'categoria_id.exists' => 'La categoría seleccionada no existe.',
             'subcategoria_id.exists' => 'La subcategoría seleccionada no existe.',
+            'laboratorio_destino_id.exists' => 'El laboratorio seleccionado no existe.',
+            'ubicacion_inicial_id.exists' => 'La ubicación seleccionada no existe.',
             'unidad_medida_base.required' => 'La unidad de medida base es obligatoria.',
+            'stock_inicial.required' => 'El stock inicial es obligatorio.',
+            'stock_inicial.min' => 'El stock inicial debe ser mayor o igual a 0.',
+            'stock_minimo.required' => 'El stock mínimo es obligatorio.',
+            'stock_minimo.min' => 'El stock mínimo debe ser mayor o igual a 0.',
         ]);
 
         DB::beginTransaction();
@@ -111,7 +122,7 @@ class ItemController extends Controller
 
             DB::commit();
 
-            $item->load(['categoria', 'subcategoria', 'unidades']);
+            $item->load(['categoria', 'subcategoria', 'unidades', 'laboratorioDestino', 'ubicacionInicial']);
 
             return response()->json([
                 'message' => 'Ítem creado exitosamente.',
@@ -131,7 +142,7 @@ class ItemController extends Controller
      */
     public function show(int $id): JsonResponse
     {
-        $item = Item::with(['categoria', 'subcategoria', 'unidades', 'historialPrecios.proveedor'])->find($id);
+        $item = Item::with(['categoria', 'subcategoria', 'unidades', 'historialPrecios.proveedor', 'laboratorioDestino', 'ubicacionInicial'])->find($id);
 
         if (!$item) {
             return response()->json([
@@ -167,12 +178,17 @@ class ItemController extends Controller
             'nombre' => 'required|string|max:255',
             'categoria_id' => 'required|exists:categorias,id',
             'subcategoria_id' => 'nullable|exists:subcategorias,id',
+            'laboratorio_destino_id' => 'nullable|exists:laboratorios,id',
+            'ubicacion_inicial_id' => 'nullable|exists:ubicaciones,id',
             'marca' => 'nullable|string|max:100',
             'modelo' => 'nullable|string|max:100',
             'unidad_medida_base' => 'required|string|max:20',
+            'stock_inicial' => 'required|numeric|min:0',
+            'stock_minimo' => 'required|numeric|min:0',
             'es_consumible' => 'boolean',
             'es_peligroso' => 'boolean',
             'descripcion' => 'nullable|string',
+            'especificaciones_tecnicas' => 'nullable|string|max:1000',
             'activo' => 'boolean',
         ], [
             'codigo.required' => 'El código del ítem es obligatorio.',
@@ -181,11 +197,15 @@ class ItemController extends Controller
             'categoria_id.required' => 'La categoría es obligatoria.',
             'categoria_id.exists' => 'La categoría seleccionada no existe.',
             'subcategoria_id.exists' => 'La subcategoría seleccionada no existe.',
+            'laboratorio_destino_id.exists' => 'El laboratorio seleccionado no existe.',
+            'ubicacion_inicial_id.exists' => 'La ubicación seleccionada no existe.',
             'unidad_medida_base.required' => 'La unidad de medida base es obligatoria.',
+            'stock_inicial.required' => 'El stock inicial es obligatorio.',
+            'stock_minimo.required' => 'El stock mínimo es obligatorio.',
         ]);
 
         $item->update($validated);
-        $item->load(['categoria', 'subcategoria', 'unidades']);
+        $item->load(['categoria', 'subcategoria', 'unidades', 'laboratorioDestino', 'ubicacionInicial']);
 
         return response()->json([
             'message' => 'Ítem actualizado exitosamente.',
