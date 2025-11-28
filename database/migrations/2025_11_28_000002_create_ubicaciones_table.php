@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('ubicaciones', function (Blueprint $table) {
             $table->id();
             $table->string('nombre', 150);
+            $table->string('codigo', 50)->unique();
             $table->enum('tipo', ['almacen', 'laboratorio', 'departamento'])->default('almacen');
             $table->foreignId('laboratorio_id')->nullable()->constrained('laboratorios')->onDelete('cascade');
             $table->text('descripcion')->nullable();
@@ -22,6 +23,7 @@ return new class extends Migration
 
             // Índices
             $table->index('nombre');
+            $table->index('codigo');
             $table->index('tipo');
             $table->index('laboratorio_id');
             $table->index('activo');
