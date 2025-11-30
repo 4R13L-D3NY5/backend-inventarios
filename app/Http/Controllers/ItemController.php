@@ -16,7 +16,8 @@ class ItemController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Item::with(['categoria', 'subcategoria', 'laboratorioDestino', 'ubicacionInicial']);
+        $query = Item::with(['categoria', 'subcategoria', 'laboratorioDestino', 'ubicacionInicial'])
+            ->withSum('inventarios as stock_total', 'cantidad_actual');
 
         // Filtro por categoría
         if ($request->has('categoria_id')) {
@@ -106,7 +107,7 @@ class ItemController extends Controller
             // Crear el ítem
             $unidades = $validated['unidades'] ?? [];
             unset($validated['unidades']);
-            
+
             $item = Item::create($validated);
 
             // Crear unidades de conversión si existen

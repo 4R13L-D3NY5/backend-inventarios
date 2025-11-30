@@ -90,6 +90,14 @@ class Item extends Model
     }
 
     /**
+     * Relación con inventario.
+     */
+    public function inventarios()
+    {
+        return $this->hasMany(Inventario::class);
+    }
+
+    /**
      * Relación con laboratorio de destino.
      */
     public function laboratorioDestino()

@@ -95,7 +95,7 @@ class DatabaseSeeder extends Seeder
             'personal_id'         => $almacenPersonal->id,
             'estado'              => true,
         ]);
-        
+
         // 4. Permisos de ejemplo (ajústalos según tus módulos)
         // $permisos = [
         //     [
@@ -423,72 +423,72 @@ class DatabaseSeeder extends Seeder
             Item::create($itemData);
         }
 
-        // // 8. Conversiones de Unidades
-        // $conversiones = [
-        //     // Ácido Sulfúrico: mL base
-        //     ['item_id' => 1, 'unidad_medida' => 'L', 'factor_a_base' => 1000],
-        //     // Ácido Clorhídrico: mL base
-        //     ['item_id' => 2, 'unidad_medida' => 'L', 'factor_a_base' => 1000],
-        //     // Hidróxido de Sodio: g base
-        //     ['item_id' => 3, 'unidad_medida' => 'kg', 'factor_a_base' => 1000],
-        //     // Etanol: mL base
-        //     ['item_id' => 4, 'unidad_medida' => 'L', 'factor_a_base' => 1000],
-        //     // Guantes: UN base
-        //     ['item_id' => 10, 'unidad_medida' => 'caja', 'factor_a_base' => 100],
-        // ];
+        // 8. Conversiones de Unidades
+        $conversiones = [
+            // Ácido Sulfúrico: mL base
+            ['item_id' => 1, 'unidad_medida' => 'L', 'factor_a_base' => 1000],
+            // Ácido Clorhídrico: mL base
+            ['item_id' => 2, 'unidad_medida' => 'L', 'factor_a_base' => 1000],
+            // Hidróxido de Sodio: g base
+            ['item_id' => 3, 'unidad_medida' => 'kg', 'factor_a_base' => 1000],
+            // Etanol: mL base
+            ['item_id' => 4, 'unidad_medida' => 'L', 'factor_a_base' => 1000],
+            // Guantes: UN base
+            ['item_id' => 10, 'unidad_medida' => 'caja', 'factor_a_base' => 100],
+        ];
 
-        // foreach ($conversiones as $conv) {
-        //     ItemUnidad::create($conv);
-        // }
+        foreach ($conversiones as $conv) {
+            ItemUnidad::create($conv);
+        }
 
-        // // 9. Historial de Precios (múltiples proveedores y fechas)
-        // $precios = [
-        //     // Ácido Sulfúrico - múltiples proveedores
-        //     ['item_id' => 1, 'proveedor_id' => 1, 'precio' => 85.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
-        //     ['item_id' => 1, 'proveedor_id' => 1, 'precio' => 88.00, 'fecha_vigencia' => '2025-10-28', 'moneda' => 'BOB'],
-        //     ['item_id' => 1, 'proveedor_id' => 2, 'precio' => 92.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
-        //     ['item_id' => 1, 'proveedor_id' => 3, 'precio' => 90.00, 'fecha_vigencia' => '2025-10-15', 'moneda' => 'BOB'],
-            
-        //     // Ácido Clorhídrico
-        //     ['item_id' => 2, 'proveedor_id' => 1, 'precio' => 75.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
-        //     ['item_id' => 2, 'proveedor_id' => 2, 'precio' => 78.00, 'fecha_vigencia' => '2025-10-25', 'moneda' => 'BOB'],
-            
-        //     // Hidróxido de Sodio
-        //     ['item_id' => 3, 'proveedor_id' => 1, 'precio' => 120.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
-        //     ['item_id' => 3, 'proveedor_id' => 6, 'precio' => 125.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
-            
-        //     // Etanol
-        //     ['item_id' => 4, 'proveedor_id' => 1, 'precio' => 65.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
-        //     ['item_id' => 4, 'proveedor_id' => 3, 'precio' => 68.00, 'fecha_vigencia' => '2025-10-18', 'moneda' => 'BOB'],
-            
-        //     // Microscopio Binocular
-        //     ['item_id' => 5, 'proveedor_id' => 2, 'precio' => 2800.00, 'fecha_vigencia' => '2025-10-28', 'moneda' => 'BOB'],
-        //     ['item_id' => 5, 'proveedor_id' => 3, 'precio' => 3100.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
-            
-        //     // Pipeta Automática
-        //     ['item_id' => 6, 'proveedor_id' => 2, 'precio' => 450.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
-        //     ['item_id' => 6, 'proveedor_id' => 10, 'precio' => 470.00, 'fecha_vigencia' => '2025-10-05', 'moneda' => 'BOB'],
-            
-        //     // Balanza Analítica
-        //     ['item_id' => 7, 'proveedor_id' => 2, 'precio' => 3500.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
-        //     ['item_id' => 7, 'proveedor_id' => 10, 'precio' => 3600.00, 'fecha_vigencia' => '2025-10-15', 'moneda' => 'BOB'],
-            
-        //     // Vaso de Precipitado
-        //     ['item_id' => 8, 'proveedor_id' => 9, 'precio' => 35.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
-        //     ['item_id' => 8, 'proveedor_id' => 3, 'precio' => 38.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
-            
-        //     // Guantes de Látex
-        //     ['item_id' => 10, 'proveedor_id' => 3, 'precio' => 120.00, 'fecha_vigencia' => '2025-10-15', 'moneda' => 'BOB'],
-        //     ['item_id' => 10, 'proveedor_id' => 8, 'precio' => 115.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
-            
-        //     // Laptop Dell
-        //     ['item_id' => 11, 'proveedor_id' => 4, 'precio' => 7500.00, 'fecha_vigencia' => '2025-10-28', 'moneda' => 'BOB'],
-        //     ['item_id' => 11, 'proveedor_id' => 5, 'precio' => 7800.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
-        // ];
+        // 9. Historial de Precios (múltiples proveedores y fechas)
+        $precios = [
+            // Ácido Sulfúrico - múltiples proveedores
+            ['item_id' => 1, 'proveedor_id' => 1, 'precio' => 85.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
+            ['item_id' => 1, 'proveedor_id' => 1, 'precio' => 88.00, 'fecha_vigencia' => '2025-10-28', 'moneda' => 'BOB'],
+            ['item_id' => 1, 'proveedor_id' => 2, 'precio' => 92.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
+            ['item_id' => 1, 'proveedor_id' => 3, 'precio' => 90.00, 'fecha_vigencia' => '2025-10-15', 'moneda' => 'BOB'],
 
-        // foreach ($precios as $precio) {
-        //     HistorialPrecio::create($precio);
-        // }
+            // Ácido Clorhídrico
+            ['item_id' => 2, 'proveedor_id' => 1, 'precio' => 75.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
+            ['item_id' => 2, 'proveedor_id' => 2, 'precio' => 78.00, 'fecha_vigencia' => '2025-10-25', 'moneda' => 'BOB'],
+
+            // Hidróxido de Sodio
+            ['item_id' => 3, 'proveedor_id' => 1, 'precio' => 120.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
+            ['item_id' => 3, 'proveedor_id' => 6, 'precio' => 125.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
+
+            // Etanol
+            ['item_id' => 4, 'proveedor_id' => 1, 'precio' => 65.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
+            ['item_id' => 4, 'proveedor_id' => 3, 'precio' => 68.00, 'fecha_vigencia' => '2025-10-18', 'moneda' => 'BOB'],
+
+            // Microscopio Binocular
+            ['item_id' => 5, 'proveedor_id' => 2, 'precio' => 2800.00, 'fecha_vigencia' => '2025-10-28', 'moneda' => 'BOB'],
+            ['item_id' => 5, 'proveedor_id' => 3, 'precio' => 3100.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
+
+            // Pipeta Automática
+            ['item_id' => 6, 'proveedor_id' => 2, 'precio' => 450.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
+            ['item_id' => 6, 'proveedor_id' => 10, 'precio' => 470.00, 'fecha_vigencia' => '2025-10-05', 'moneda' => 'BOB'],
+
+            // Balanza Analítica
+            ['item_id' => 7, 'proveedor_id' => 2, 'precio' => 3500.00, 'fecha_vigencia' => '2025-11-01', 'moneda' => 'BOB'],
+            ['item_id' => 7, 'proveedor_id' => 10, 'precio' => 3600.00, 'fecha_vigencia' => '2025-10-15', 'moneda' => 'BOB'],
+
+            // Vaso de Precipitado
+            ['item_id' => 8, 'proveedor_id' => 9, 'precio' => 35.00, 'fecha_vigencia' => '2025-10-20', 'moneda' => 'BOB'],
+            ['item_id' => 8, 'proveedor_id' => 3, 'precio' => 38.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
+
+            // Guantes de Látex
+            ['item_id' => 10, 'proveedor_id' => 3, 'precio' => 120.00, 'fecha_vigencia' => '2025-10-15', 'moneda' => 'BOB'],
+            ['item_id' => 10, 'proveedor_id' => 8, 'precio' => 115.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
+
+            // Laptop Dell
+            ['item_id' => 11, 'proveedor_id' => 4, 'precio' => 7500.00, 'fecha_vigencia' => '2025-10-28', 'moneda' => 'BOB'],
+            ['item_id' => 11, 'proveedor_id' => 5, 'precio' => 7800.00, 'fecha_vigencia' => '2025-10-10', 'moneda' => 'BOB'],
+        ];
+
+        foreach ($precios as $precio) {
+            HistorialPrecio::create($precio);
+        }
 
         // 10. Laboratorios
         $laboratorios = [
@@ -660,30 +660,98 @@ class DatabaseSeeder extends Seeder
             // OC-2025-001 (Borrador) - Reactivos químicos
             ['orden_compra_id' => 1, 'item_id' => 1, 'cantidad_solicitada' => 5, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 85.00],
             ['orden_compra_id' => 1, 'item_id' => 2, 'cantidad_solicitada' => 3, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 75.00],
-            
+
             // OC-2025-002 (Enviada) - Equipos
             ['orden_compra_id' => 2, 'item_id' => 5, 'cantidad_solicitada' => 2, 'cantidad_recibida' => 0, 'unidad_medida' => 'UN', 'precio_unitario' => 2800.00],
             ['orden_compra_id' => 2, 'item_id' => 6, 'cantidad_solicitada' => 5, 'cantidad_recibida' => 0, 'unidad_medida' => 'UN', 'precio_unitario' => 450.00],
-            
+
             // OC-2025-003 (Confirmada) - Reactivos
             ['orden_compra_id' => 3, 'item_id' => 1, 'cantidad_solicitada' => 10, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 85.00],
             ['orden_compra_id' => 3, 'item_id' => 3, 'cantidad_solicitada' => 5, 'cantidad_recibida' => 0, 'unidad_medida' => 'kg', 'precio_unitario' => 120.00],
             ['orden_compra_id' => 3, 'item_id' => 4, 'cantidad_solicitada' => 8, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 65.00],
-            
+
             // OC-2025-004 (Recibida parcial) - Material de vidrio
             ['orden_compra_id' => 4, 'item_id' => 8, 'cantidad_solicitada' => 20, 'cantidad_recibida' => 12, 'unidad_medida' => 'UN', 'precio_unitario' => 35.00],
             ['orden_compra_id' => 4, 'item_id' => 9, 'cantidad_solicitada' => 15, 'cantidad_recibida' => 8, 'unidad_medida' => 'UN', 'precio_unitario' => 45.00],
-            
+
             // OC-2025-005 (Completada) - Material de vidrio
             ['orden_compra_id' => 5, 'item_id' => 8, 'cantidad_solicitada' => 30, 'cantidad_recibida' => 30, 'unidad_medida' => 'UN', 'precio_unitario' => 35.00],
             ['orden_compra_id' => 5, 'item_id' => 9, 'cantidad_solicitada' => 25, 'cantidad_recibida' => 25, 'unidad_medida' => 'UN', 'precio_unitario' => 45.00],
-            
+
             // OC-2025-006 (Cancelada) - Insumos
             ['orden_compra_id' => 6, 'item_id' => 10, 'cantidad_solicitada' => 50, 'cantidad_recibida' => 0, 'unidad_medida' => 'caja', 'precio_unitario' => 120.00],
         ];
 
         foreach ($ordenCompraItems as $itemData) {
             \App\Models\OrdenCompraItem::create($itemData);
+        }
+
+        // 15. Inventario Inicial
+        $inventario = [
+            // Ácido Sulfúrico (Stock Bajo)
+            [
+                'almacen_id' => 2, // Sub-Almacén Química
+                'item_id' => 1,
+                'cantidad_actual' => 2,
+                'cantidad_reservada' => 0,
+                'stock_minimo' => 5,
+                'stock_maximo' => 20,
+                'ultima_actualizacion' => now(),
+            ],
+            // Ácido Clorhídrico (Stock Normal)
+            [
+                'almacen_id' => 2,
+                'item_id' => 2,
+                'cantidad_actual' => 10,
+                'cantidad_reservada' => 0,
+                'stock_minimo' => 5,
+                'stock_maximo' => 20,
+                'ultima_actualizacion' => now(),
+            ],
+            // Hidróxido de Sodio (Stock Crítico/Agotado)
+            [
+                'almacen_id' => 2,
+                'item_id' => 3,
+                'cantidad_actual' => 0,
+                'cantidad_reservada' => 0,
+                'stock_minimo' => 2,
+                'stock_maximo' => 10,
+                'ultima_actualizacion' => now(),
+            ],
+            // Microscopio (Stock Normal)
+            [
+                'almacen_id' => 1, // Almacén Central
+                'item_id' => 5,
+                'cantidad_actual' => 5,
+                'cantidad_reservada' => 1,
+                'stock_minimo' => 2,
+                'stock_maximo' => 10,
+                'ultima_actualizacion' => now(),
+            ],
+            // Guantes (Stock Bajo)
+            [
+                'almacen_id' => 1,
+                'item_id' => 10,
+                'cantidad_actual' => 15,
+                'cantidad_reservada' => 0,
+                'stock_minimo' => 50, // Caja de 100
+                'stock_maximo' => 200,
+                'ultima_actualizacion' => now(),
+            ],
+            // Laptop (Stock Normal)
+            [
+                'almacen_id' => 1,
+                'item_id' => 11,
+                'cantidad_actual' => 3,
+                'cantidad_reservada' => 0,
+                'stock_minimo' => 1,
+                'stock_maximo' => 5,
+                'ultima_actualizacion' => now(),
+            ],
+        ];
+
+        foreach ($inventario as $inv) {
+            Inventario::create($inv);
         }
 
         // Recalcular totales de las órdenes
