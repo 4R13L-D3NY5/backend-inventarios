@@ -1,0 +1,732 @@
+{
+    "info": {
+        "_postman_id": "unitepc-inventory-system",
+        "name": "UNITEPC - Sistema de Gestión de Activos",
+        "description": "Colección completa de pruebas para el sistema de gestión de activos UNITEPC",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "auth": {
+        "type": "bearer",
+        "bearer": [
+            {
+                "key": "token",
+                "value": "{{auth_token}}",
+                "type": "string"
+            }
+        ]
+    },
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost/backend-inventarios/public/api",
+            "type": "string"
+        },
+        {
+            "key": "auth_token",
+            "value": "",
+            "type": "string"
+        }
+    ],
+    "item": [
+        {
+            "name": "1. Autenticación",
+            "item": [
+                {
+                    "name": "Login - Admin",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response has token', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('token');",
+                                    "    pm.collectionVariables.set('auth_token', jsonData.token);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"usuario\": \"admin\",\n    \"password\": \"admin123\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/login",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "login"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Get Current User",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('User data is returned', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData).to.have.property('usuario');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/me",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "me"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "2. Proveedores",
+            "item": [
+                {
+                    "name": "Listar Proveedores",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 200', function () {",
+                                    "    pm.response.to.have.status(200);",
+                                    "});",
+                                    "",
+                                    "pm.test('Response is array', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.data).to.be.an('array');",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/proveedores",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "proveedores"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Proveedor",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 201', function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test('Proveedor created', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.expect(jsonData.data).to.have.property('id');",
+                                    "    pm.collectionVariables.set('proveedor_id', jsonData.data.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"nombre\": \"Proveedor Test\",\n    \"nit\": \"1234567890\",\n    \"telefono\": \"+591 78945612\",\n    \"email\": \"test@proveedor.com\",\n    \"direccion\": \"Av. Test #123\",\n    \"activo\": true\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/proveedores",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "proveedores"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "3. Items",
+            "item": [
+                {
+                    "name": "Listar Items",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/items",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "items"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Items Bajo Stock",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/inventario/bajo-stock",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "inventario",
+                                "bajo-stock"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "4. Solicitudes",
+            "item": [
+                {
+                    "name": "Crear Solicitud",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 201', function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test('Solicitud created', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set('solicitud_id', jsonData.data.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"laboratorio_id\": 1,\n    \"fecha_necesidad\": \"2025-12-15\",\n    \"justificacion\": \"Materiales para práctica de laboratorio\",\n    \"items\": [\n        {\n            \"item_id\": 1,\n            \"cantidad_solicitada\": 5,\n            \"unidad_medida\": \"L\"\n        }\n    ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/solicitudes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "solicitudes"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Aprobar Solicitud - Subalmacén",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/solicitudes/{{solicitud_id}}/aprobar-subalmacen",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "solicitudes",
+                                "{{solicitud_id}}",
+                                "aprobar-subalmacen"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Listar Solicitudes Pendientes",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/solicitudes-pendientes/mis-pendientes",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "solicitudes-pendientes",
+                                "mis-pendientes"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "5. Órdenes de Compra",
+            "item": [
+                {
+                    "name": "Listar Órdenes",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ordenes-compra",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ordenes-compra"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Crear Orden de Compra",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 201', function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test('Orden created', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set('orden_compra_id', jsonData.data.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"proveedor_id\": 1,\n    \"fecha_emision\": \"2025-11-29\",\n    \"fecha_entrega_estimada\": \"2025-12-15\",\n    \"condiciones_pago\": \"Pago contra entrega\",\n    \"items\": [\n        {\n            \"item_id\": 1,\n            \"cantidad_solicitada\": 10,\n            \"unidad_medida\": \"L\",\n            \"precio_unitario\": 85.00\n        },\n        {\n            \"item_id\": 2,\n            \"cantidad_solicitada\": 5,\n            \"unidad_medida\": \"L\",\n            \"precio_unitario\": 75.00\n        }\n    ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ordenes-compra",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ordenes-compra"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Aprobar Orden",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ordenes-compra/{{orden_compra_id}}/aprobar",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ordenes-compra",
+                                "{{orden_compra_id}}",
+                                "aprobar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Confirmar Orden",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ordenes-compra/{{orden_compra_id}}/confirmar",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ordenes-compra",
+                                "{{orden_compra_id}}",
+                                "confirmar"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Registrar Recepción",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"almacen_id\": 1,\n    \"items\": [\n        {\n            \"orden_compra_item_id\": 1,\n            \"cantidad\": 10\n        }\n    ]\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/ordenes-compra/{{orden_compra_id}}/recepcion",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ordenes-compra",
+                                "{{orden_compra_id}}",
+                                "recepcion"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Órdenes Pendientes de Recepción",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/ordenes-compra/pendientes/recepcion",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "ordenes-compra",
+                                "pendientes",
+                                "recepcion"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "6. Inventario",
+            "item": [
+                {
+                    "name": "Stock Detallado",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/inventario/stock-detallado",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "inventario",
+                                "stock-detallado"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Stock por Categoría",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/inventario/por-categoria",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "inventario",
+                                "por-categoria"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Valoración de Inventario",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/inventario/valoracion",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "inventario",
+                                "valoracion"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Kardex de Item",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/inventario/kardex/1",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "inventario",
+                                "kardex",
+                                "1"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "7. Movimientos de Inventario",
+            "item": [
+                {
+                    "name": "Registrar Entrada",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"almacen_id\": 1,\n    \"item_id\": 1,\n    \"cantidad\": 50,\n    \"unidad_medida\": \"L\",\n    \"motivo\": \"Compra directa\",\n    \"observaciones\": \"Entrada de prueba\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/movimientos-inventario/entrada",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "movimientos-inventario",
+                                "entrada"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Registrar Salida",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"almacen_id\": 1,\n    \"item_id\": 1,\n    \"cantidad\": 5,\n    \"unidad_medida\": \"L\",\n    \"motivo\": \"Consumo laboratorio\",\n    \"observaciones\": \"Salida para práctica\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/movimientos-inventario/salida",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "movimientos-inventario",
+                                "salida"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Registrar Traspaso",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"almacen_origen_id\": 1,\n    \"almacen_destino_id\": 2,\n    \"item_id\": 1,\n    \"cantidad\": 10,\n    \"unidad_medida\": \"L\",\n    \"motivo\": \"Traspaso a sub-almacén\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/movimientos-inventario/traspaso",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "movimientos-inventario",
+                                "traspaso"
+                            ]
+                        }
+                    }
+                }
+            ]
+        },
+        {
+            "name": "8. Préstamos",
+            "item": [
+                {
+                    "name": "Crear Préstamo",
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "exec": [
+                                    "pm.test('Status code is 201', function () {",
+                                    "    pm.response.to.have.status(201);",
+                                    "});",
+                                    "",
+                                    "pm.test('Préstamo created', function () {",
+                                    "    var jsonData = pm.response.json();",
+                                    "    pm.collectionVariables.set('prestamo_id', jsonData.data.id);",
+                                    "});"
+                                ],
+                                "type": "text/javascript"
+                            }
+                        }
+                    ],
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"item_id\": 5,\n    \"almacen_id\": 1,\n    \"custodio_nombre\": \"Juan Pérez\",\n    \"custodio_ci\": \"1234567\",\n    \"custodio_telefono\": \"+591 78945612\",\n    \"fecha_prestamo\": \"2025-11-29\",\n    \"fecha_devolucion_estimada\": \"2025-12-05\",\n    \"motivo\": \"Investigación\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/prestamos",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "prestamos"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Préstamos Activos",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/prestamos/activos/lista",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "prestamos",
+                                "activos",
+                                "lista"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Préstamos Vencidos",
+                    "request": {
+                        "method": "GET",
+                        "header": [],
+                        "url": {
+                            "raw": "{{base_url}}/prestamos/vencidos/lista",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "prestamos",
+                                "vencidos",
+                                "lista"
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "Devolver Préstamo",
+                    "request": {
+                        "method": "POST",
+                        "header": [
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"observaciones_devolucion\": \"Equipo en buen estado\"\n}"
+                        },
+                        "url": {
+                            "raw": "{{base_url}}/prestamos/{{prestamo_id}}/devolver",
+                            "host": [
+                                "{{base_url}}"
+                            ],
+                            "path": [
+                                "prestamos",
+                                "{{prestamo_id}}",
+                                "devolver"
+                            ]
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

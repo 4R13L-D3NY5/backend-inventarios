@@ -20,6 +20,9 @@ use App\Models\Almacen;
 use App\Models\Inventario;
 use App\Models\MovimientoInventario;
 use App\Models\Prestamo;
+use App\Models\OrdenCompra;
+use App\Models\OrdenCompraItem;
+
 
 class DatabaseSeeder extends Seeder
 {
@@ -549,7 +552,146 @@ class DatabaseSeeder extends Seeder
             Almacen::create($alm);
         }
 
-        $this->command->info('✅ Seeders completados: Usuarios, Proveedores, Categorías, Laboratorios, Ubicaciones y Almacenes');
+        // 13. Órdenes de Compra de ejemplo
+        $ordenesCompra = [
+            // Orden en borrador
+            [
+                'numero_orden' => 'OC-2025-001',
+                'proveedor_id' => 1, // Química del Sur
+                'fecha_emision' => '2025-11-20',
+                'fecha_entrega_estimada' => '2025-12-05',
+                'estado' => 'borrador',
+                'moneda' => 'BOB',
+                'impuestos' => 0,
+                'condiciones_pago' => 'Pago contra entrega',
+                'observaciones' => 'Orden de prueba en borrador',
+                'usuario_creador_id' => 1,
+                'activo' => true,
+            ],
+            // Orden enviada (aprobada)
+            [
+                'numero_orden' => 'OC-2025-002',
+                'proveedor_id' => 2, // LabEquip Bolivia
+                'fecha_emision' => '2025-11-22',
+                'fecha_entrega_estimada' => '2025-12-10',
+                'estado' => 'enviada',
+                'moneda' => 'BOB',
+                'impuestos' => 0,
+                'condiciones_pago' => '50% adelanto, 50% contra entrega',
+                'observaciones' => 'Orden aprobada, pendiente confirmación del proveedor',
+                'usuario_creador_id' => 1,
+                'usuario_aprobador_id' => 1,
+                'fecha_aprobacion' => '2025-11-22 10:30:00',
+                'activo' => true,
+            ],
+            // Orden confirmada
+            [
+                'numero_orden' => 'OC-2025-003',
+                'proveedor_id' => 1,
+                'fecha_emision' => '2025-11-25',
+                'fecha_entrega_estimada' => '2025-12-15',
+                'estado' => 'confirmada',
+                'moneda' => 'BOB',
+                'impuestos' => 0,
+                'condiciones_pago' => 'Crédito 30 días',
+                'observaciones' => 'Orden confirmada por proveedor',
+                'usuario_creador_id' => 1,
+                'usuario_aprobador_id' => 1,
+                'fecha_aprobacion' => '2025-11-25 09:00:00',
+                'activo' => true,
+            ],
+            // Orden recibida parcialmente
+            [
+                'numero_orden' => 'OC-2025-004',
+                'proveedor_id' => 6, // Reactivos Andinos
+                'fecha_emision' => '2025-11-15',
+                'fecha_entrega_estimada' => '2025-11-30',
+                'estado' => 'recibida_parcial',
+                'moneda' => 'BOB',
+                'impuestos' => 0,
+                'condiciones_pago' => 'Pago contra entrega',
+                'observaciones' => 'Recepción parcial, pendiente completar',
+                'usuario_creador_id' => 1,
+                'usuario_aprobador_id' => 1,
+                'fecha_aprobacion' => '2025-11-15 14:00:00',
+                'activo' => true,
+            ],
+            // Orden completada
+            [
+                'numero_orden' => 'OC-2025-005',
+                'proveedor_id' => 9, // Cristalería Científica
+                'fecha_emision' => '2025-11-10',
+                'fecha_entrega_estimada' => '2025-11-25',
+                'fecha_entrega_real' => '2025-11-24',
+                'estado' => 'recibida_completa',
+                'moneda' => 'BOB',
+                'impuestos' => 0,
+                'condiciones_pago' => 'Pago contra entrega',
+                'observaciones' => 'Orden completada exitosamente',
+                'usuario_creador_id' => 1,
+                'usuario_aprobador_id' => 1,
+                'fecha_aprobacion' => '2025-11-10 11:00:00',
+                'activo' => true,
+            ],
+            // Orden cancelada
+            [
+                'numero_orden' => 'OC-2025-006',
+                'proveedor_id' => 3,
+                'fecha_emision' => '2025-11-05',
+                'fecha_entrega_estimada' => '2025-11-20',
+                'estado' => 'cancelada',
+                'moneda' => 'BOB',
+                'impuestos' => 0,
+                'condiciones_pago' => 'Pago anticipado',
+                'observaciones' => 'CANCELADA: Proveedor no pudo cumplir con los tiempos de entrega',
+                'usuario_creador_id' => 1,
+                'usuario_aprobador_id' => 1,
+                'fecha_aprobacion' => '2025-11-05 08:00:00',
+                'activo' => true,
+            ],
+        ];
+
+        foreach ($ordenesCompra as $ordenData) {
+            \App\Models\OrdenCompra::create($ordenData);
+        }
+
+        // 14. Ítems de las órdenes de compra
+        $ordenCompraItems = [
+            // OC-2025-001 (Borrador) - Reactivos químicos
+            ['orden_compra_id' => 1, 'item_id' => 1, 'cantidad_solicitada' => 5, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 85.00],
+            ['orden_compra_id' => 1, 'item_id' => 2, 'cantidad_solicitada' => 3, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 75.00],
+            
+            // OC-2025-002 (Enviada) - Equipos
+            ['orden_compra_id' => 2, 'item_id' => 5, 'cantidad_solicitada' => 2, 'cantidad_recibida' => 0, 'unidad_medida' => 'UN', 'precio_unitario' => 2800.00],
+            ['orden_compra_id' => 2, 'item_id' => 6, 'cantidad_solicitada' => 5, 'cantidad_recibida' => 0, 'unidad_medida' => 'UN', 'precio_unitario' => 450.00],
+            
+            // OC-2025-003 (Confirmada) - Reactivos
+            ['orden_compra_id' => 3, 'item_id' => 1, 'cantidad_solicitada' => 10, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 85.00],
+            ['orden_compra_id' => 3, 'item_id' => 3, 'cantidad_solicitada' => 5, 'cantidad_recibida' => 0, 'unidad_medida' => 'kg', 'precio_unitario' => 120.00],
+            ['orden_compra_id' => 3, 'item_id' => 4, 'cantidad_solicitada' => 8, 'cantidad_recibida' => 0, 'unidad_medida' => 'L', 'precio_unitario' => 65.00],
+            
+            // OC-2025-004 (Recibida parcial) - Material de vidrio
+            ['orden_compra_id' => 4, 'item_id' => 8, 'cantidad_solicitada' => 20, 'cantidad_recibida' => 12, 'unidad_medida' => 'UN', 'precio_unitario' => 35.00],
+            ['orden_compra_id' => 4, 'item_id' => 9, 'cantidad_solicitada' => 15, 'cantidad_recibida' => 8, 'unidad_medida' => 'UN', 'precio_unitario' => 45.00],
+            
+            // OC-2025-005 (Completada) - Material de vidrio
+            ['orden_compra_id' => 5, 'item_id' => 8, 'cantidad_solicitada' => 30, 'cantidad_recibida' => 30, 'unidad_medida' => 'UN', 'precio_unitario' => 35.00],
+            ['orden_compra_id' => 5, 'item_id' => 9, 'cantidad_solicitada' => 25, 'cantidad_recibida' => 25, 'unidad_medida' => 'UN', 'precio_unitario' => 45.00],
+            
+            // OC-2025-006 (Cancelada) - Insumos
+            ['orden_compra_id' => 6, 'item_id' => 10, 'cantidad_solicitada' => 50, 'cantidad_recibida' => 0, 'unidad_medida' => 'caja', 'precio_unitario' => 120.00],
+        ];
+
+        foreach ($ordenCompraItems as $itemData) {
+            \App\Models\OrdenCompraItem::create($itemData);
+        }
+
+        // Recalcular totales de las órdenes
+        foreach (\App\Models\OrdenCompra::all() as $orden) {
+            $orden->calcularTotales();
+        }
+
+        $this->command->info('✅ Seeders completados: Usuarios, Proveedores, Categorías, Laboratorios, Ubicaciones, Almacenes y Órdenes de Compra');
 
     }
 }

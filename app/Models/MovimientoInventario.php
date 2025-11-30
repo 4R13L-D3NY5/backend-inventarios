@@ -55,10 +55,11 @@ class MovimientoInventario extends Model
         return $this->belongsTo(User::class, 'responsable_id');
     }
 
-    // public function ordenCompra()
-    // {
-    //     return $this->belongsTo(OrdenCompra::class);
-    // }
+    public function ordenCompra()
+    {
+        return $this->belongsTo(OrdenCompra::class);
+    }
+
 
     public function solicitud()
     {

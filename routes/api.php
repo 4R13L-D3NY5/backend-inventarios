@@ -15,6 +15,10 @@ use App\Http\Controllers\AlmacenController;
 use App\Http\Controllers\InventarioController;
 use App\Http\Controllers\MovimientoInventarioController;
 use App\Http\Controllers\PrestamoController;
+use App\Http\Controllers\OrdenCompraController;
+use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\DashboardController;
+
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -87,7 +91,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('movimientos-inventario/traspaso', [MovimientoInventarioController::class, 'registrarTraspaso']);
     Route::post('movimientos-inventario/ajuste', [MovimientoInventarioController::class, 'registrarAjuste']);
 
+    // Órdenes de Compra
+    Route::apiResource('ordenes-compra', OrdenCompraController::class);
+    Route::get('ordenes-compra/estado/{estado}', [OrdenCompraController::class, 'porEstado']);
+    Route::get('ordenes-compra/pendientes/recepcion', [OrdenCompraController::class, 'pendientesRecepcion']);
+    Route::get('ordenes-compra/historial/completas', [OrdenCompraController::class, 'historial']);
+    Route::post('ordenes-compra/{id}/aprobar', [OrdenCompraController::class, 'aprobar']);
+    Route::post('ordenes-compra/{id}/confirmar', [OrdenCompraController::class, 'confirmar']);
+    Route::post('ordenes-compra/{id}/recepcion', [OrdenCompraController::class, 'registrarRecepcion']);
+    Route::post('ordenes-compra/{id}/cancelar', [OrdenCompraController::class, 'cancelar']);
+
     // Préstamos
+
     Route::apiResource('prestamos', PrestamoController::class);
     Route::get('prestamos/activos/lista', [PrestamoController::class, 'activos']);
     Route::get('prestamos/vencidos/lista', [PrestamoController::class, 'vencidos']);
@@ -97,4 +112,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('prestamos/{id}/cancelar', [PrestamoController::class, 'cancelar']);
     Route::post('prestamos/{id}/recordatorio', [PrestamoController::class, 'enviarRecordatorio']);
     Route::post('prestamos/verificar-vencimientos', [PrestamoController::class, 'verificarVencimientos']);
+
+    // Reportes
+    Route::prefix('reportes')->group(function () {
+        Route::get('/inventario-valorizado', [ReporteController::class, 'inventarioValorizado']);
+        Route::get('/ordenes-compra-estado', [ReporteController::class, 'ordenesCompraPorEstado']);
+        Route::get('/consumo-laboratorio', [ReporteController::class, 'consumoPorLaboratorio']);
+        Route::get('/estado-prestamos', [ReporteController::class, 'estadoPrestamos']);
+        Route::get('/inversion-inventario', [ReporteController::class, 'inversionInventario']);
+    });
+
+    // Dashboard
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
