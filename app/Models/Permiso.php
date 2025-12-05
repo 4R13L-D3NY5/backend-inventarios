@@ -12,10 +12,10 @@ class Permiso extends Model
     protected $table = 'permisos';
 
     protected $fillable = [
-        'rol_id',
         'nombre',
         'clave',
         'descripcion',
+        'grupo',
         'estado',
     ];
 
@@ -23,8 +23,8 @@ class Permiso extends Model
         'estado' => 'boolean',
     ];
 
-    public function rol()
+    public function rols()
     {
-        return $this->belongsTo(Role::class, 'rol_id');
+        return $this->belongsToMany(Rol::class, 'rol_permiso', 'permiso_id', 'rol_id');
     }
 }

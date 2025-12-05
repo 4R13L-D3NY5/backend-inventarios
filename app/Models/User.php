@@ -47,6 +47,31 @@ class User extends Authenticatable
     public function permisos()
     {
         // Accede a los permisos a través del rol
-        return $this->rol?->permisos();
+        return $this->rol ? $this->rol->permisos : collect();
+    }
+
+    /**
+     * Verificar si el usuario tiene un permiso específico
+     */
+    public function hasPermission($clave)
+    {
+        if (!$this->rol) {
+            return false;
+        }
+
+        // Super Admin siempre tiene acceso (asumiendo ID 1 o nombre 'Super Admin')
+        if ($this->rol->id === 1 || $this->rol->nombre === 'Super Admin') {
+            return true;
+        }
+
+        return $this->rol->permisos->contains('clave', $clave);
+    }
+
+    /**
+     * Verificar si el usuario tiene un rol específico
+     */
+    public function hasRole($roleName)
+    {
+        return $this->rol && $this->rol->nombre === $roleName;
     }
 }

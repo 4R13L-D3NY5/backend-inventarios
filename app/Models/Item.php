@@ -98,6 +98,14 @@ class Item extends Model
     }
 
     /**
+     * Relación con movimientos de inventario.
+     */
+    public function movimientosInventario()
+    {
+        return $this->hasMany(MovimientoInventario::class);
+    }
+
+    /**
      * Relación con laboratorio de destino.
      */
     public function laboratorioDestino()

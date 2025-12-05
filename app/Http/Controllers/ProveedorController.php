@@ -17,7 +17,7 @@ class ProveedorController extends Controller
      */
     public function index(Request $request): JsonResponse
     {
-        $query = Proveedor::query();
+        $query = Proveedor::with(['historialPrecios.item', 'compras.items.item']);
 
         // Filtro de búsqueda
         if ($request->has('buscar') && $request->buscar != '') {

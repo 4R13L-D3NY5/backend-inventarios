@@ -71,21 +71,71 @@ class Proveedor extends Model
         });
     }
 
-    // Relaciones futuras (preparadas para próximos módulos)
-    
     /**
-     * Relación con historial de precios (a implementar).
+     * Los atributos que se agregan a la serialización del modelo.
+     *
+     * @var array
      */
-    // public function historialPrecios()
-    // {
-    //     return $this->hasMany(HistorialPrecio::class);
-    // }
+    protected $appends = ['items_suministrados'];
 
     /**
-     * Relación con compras/órdenes de compra (a implementar).
+     * Relación con historial de precios.
      */
-    // public function compras()
-    // {
-    //     return $this->hasMany(Compra::class);
-    // }
+    public function historialPrecios()
+    {
+        return $this->hasMany(HistorialPrecio::class);
+    }
+
+    /**
+     * Accessor para obtener los ítems suministrados como string.
+     */
+    /**
+     * Accessor para obtener los ítems suministrados como string.
+     */
+    public function getItemsSuministradosAttribute()
+    {
+        $items = collect();
+
+        // 1. Intentar obtener de historial de precios
+        if ($this->relationLoaded('historialPrecios')) {
+            $items = $items->concat($this->historialPrecios->map(function ($historial) {
+                return $historial->item ? $historial->item->nombre : null;
+            }));
+        }
+
+        // 2. Intentar obtener de órdenes de compra
+        if ($this->relationLoaded('compras')) {
+            $this->compras->each(function ($compra) use (&$items) {
+                if ($compra->relationLoaded('items')) {
+                    $compraItems = $compra->items->map(function ($ordenItem) {
+                        return $ordenItem->item ? $ordenItem->item->nombre : null;
+                    });
+                    $items = $items->concat($compraItems);
+                }
+            });
+        }
+
+        $items = $items->filter()->unique()->values();
+
+        if ($items->isEmpty()) {
+            return 'Sin ítems registrados';
+        }
+
+        $count = $items->count();
+        $limit = 3;
+
+        if ($count <= $limit) {
+            return $items->implode(', ');
+        }
+
+        return $items->take($limit)->implode(', ') . ' y ' . ($count - $limit) . ' más';
+    }
+
+    /**
+     * Relación con compras/órdenes de compra.
+     */
+    public function compras()
+    {
+        return $this->hasMany(OrdenCompra::class);
+    }
 }

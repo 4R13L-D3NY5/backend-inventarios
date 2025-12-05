@@ -11,7 +11,8 @@ class RolController extends Controller
 {
     public function index()
     {
-        return Rol::withCount('users')->get();
+        // Eager load permissions count
+        return Rol::withCount('users')->with('permisos')->get();
     }
 
     public function store(Request $request)
@@ -20,13 +21,23 @@ class RolController extends Controller
             'nombre'      => 'required|string|max:255|unique:rols,nombre',
             'descripcion' => 'nullable|string',
             'estado'      => 'boolean',
+            'permisos'    => 'array', // Array of permission IDs
+            'permisos.*'  => 'exists:permisos,id',
         ]);
 
-        $rol = Rol::create($validated);
+        $rol = Rol::create([
+            'nombre' => $validated['nombre'],
+            'descripcion' => $validated['descripcion'] ?? null,
+            'estado' => $validated['estado'] ?? true,
+        ]);
+
+        if (isset($validated['permisos'])) {
+            $rol->permisos()->sync($validated['permisos']);
+        }
 
         return response()->json([
             'message' => 'Rol creado correctamente',
-            'data'    => $rol,
+            'data'    => $rol->load('permisos'),
         ], 201);
     }
 
@@ -46,18 +57,35 @@ class RolController extends Controller
             ],
             'descripcion' => 'nullable|string',
             'estado'      => 'boolean',
+            'permisos'    => 'array',
+            'permisos.*'  => 'exists:permisos,id',
         ]);
 
-        $rol->update($validated);
+        $rol->update([
+            'nombre' => $validated['nombre'],
+            'descripcion' => $validated['descripcion'] ?? null,
+            'estado' => $validated['estado'] ?? true,
+        ]);
+
+        if (isset($validated['permisos'])) {
+            $rol->permisos()->sync($validated['permisos']);
+        }
 
         return response()->json([
             'message' => 'Rol actualizado correctamente',
-            'data'    => $rol,
+            'data'    => $rol->load('permisos'),
         ]);
     }
 
     public function destroy(Rol $rol)
     {
+        // Optional: Check if role has users before deleting
+        if ($rol->users()->exists()) {
+            return response()->json([
+                'message' => 'No se puede eliminar el rol porque tiene usuarios asignados',
+            ], 422);
+        }
+
         $rol->delete();
 
         return response()->json([

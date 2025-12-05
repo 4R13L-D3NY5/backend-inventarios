@@ -18,7 +18,8 @@ use App\Http\Controllers\PrestamoController;
 use App\Http\Controllers\OrdenCompraController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\LaboratorioController;
+use App\Http\Controllers\UbicacionController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -31,6 +32,7 @@ Route::middleware('auth:sanctum')->group(function () {
     // Usuarios
     Route::apiResource('users', UserController::class);
     Route::post('users/{user}/toggle-status', [UserController::class, 'toggleStatus']);
+    Route::post('users/{user}/reset-password', [UserController::class, 'resetPassword']);
 
     // Roles
     Route::apiResource('roles', RolController::class);
@@ -49,23 +51,25 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Ítems
     Route::apiResource('items', ItemController::class);
+    Route::get('laboratorios', [LaboratorioController::class, 'index']);
+    Route::get('ubicaciones', [UbicacionController::class, 'index']);
 
     // Historial de Precios
     Route::apiResource('historial-precios', HistorialPrecioController::class);
-    
+
     // Rutas especiales para comparativa y tendencia
     Route::get('items/{item}/comparativa-proveedores', [HistorialPrecioController::class, 'comparativa']);
     Route::get('items/{item}/tendencia-precios', [HistorialPrecioController::class, 'tendencia']);
 
     // Solicitudes
     Route::apiResource('solicitudes', SolicitudController::class);
-    
+
     // Rutas de aprobación de solicitudes
     Route::post('solicitudes/{id}/aprobar-subalmacen', [SolicitudController::class, 'aprobarSubalmacen']);
     Route::post('solicitudes/{id}/aprobar-almacen', [SolicitudController::class, 'aprobarAlmacen']);
     Route::post('solicitudes/{id}/aprobar-adquisicion', [SolicitudController::class, 'aprobarAdquisicion']);
     Route::post('solicitudes/{id}/denegar', [SolicitudController::class, 'denegar']);
-    
+
     // Consultas especiales de solicitudes
     Route::get('solicitudes-pendientes/mis-pendientes', [SolicitudController::class, 'pendientes']);
     Route::get('solicitudes-historial/completadas', [SolicitudController::class, 'historial']);
@@ -123,5 +127,7 @@ Route::middleware('auth:sanctum')->group(function () {
     });
 
     // Dashboard
-    Route::get('/dashboard', [DashboardController::class, 'index']);
+    // Route::get('/dashboard', [DashboardController::class, 'index']);
 });
+
+Route::get('/dashboard', [DashboardController::class, 'index']);

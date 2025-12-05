@@ -11,10 +11,16 @@ class PermisoController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Permiso::with('rol');
+        $query = Permiso::query();
 
         if ($request->has('rol_id')) {
-            $query->where('rol_id', $request->rol_id);
+            $query->whereHas('rols', function ($q) use ($request) {
+                $q->where('rols.id', $request->rol_id);
+            });
+        }
+
+        if ($request->has('grupo')) {
+            $query->where('grupo', $request->grupo);
         }
 
         if ($request->has('estado')) {
@@ -27,10 +33,10 @@ class PermisoController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'rol_id'      => 'required|exists:roles,id',
             'nombre'      => 'required|string|max:255',
             'clave'       => 'required|string|max:255|unique:permisos,clave',
             'descripcion' => 'nullable|string',
+            'grupo'       => 'nullable|string',
             'estado'      => 'boolean',
         ]);
 
@@ -44,13 +50,12 @@ class PermisoController extends Controller
 
     public function show(Permiso $permiso)
     {
-        return $permiso->load('rol');
+        return $permiso->load('rols');
     }
 
     public function update(Request $request, Permiso $permiso)
     {
         $validated = $request->validate([
-            'rol_id'      => 'required|exists:roles,id',
             'nombre'      => 'required|string|max:255',
             'clave'       => [
                 'required',
@@ -59,6 +64,7 @@ class PermisoController extends Controller
                 Rule::unique('permisos', 'clave')->ignore($permiso->id),
             ],
             'descripcion' => 'nullable|string',
+            'grupo'       => 'nullable|string',
             'estado'      => 'boolean',
         ]);
 

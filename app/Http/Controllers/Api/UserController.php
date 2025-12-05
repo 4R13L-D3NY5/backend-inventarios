@@ -45,17 +45,35 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
+            'name'        => 'nullable|string|max:255',
             'usuario'     => 'required|string|max:100|unique:users,usuario',
             'email'       => 'nullable|email|max:255|unique:users,email',
             'password'    => 'required|string|min:6',
             'rol_id'      => 'required|exists:rols,id',
-            'personal_id' => 'nullable|exists:personals,id',
             'estado'      => 'boolean',
+            // Datos de Personal
+            'personal.nombres'   => 'required|string|max:255',
+            'personal.apellidos' => 'required|string|max:255',
+            'personal.ci'        => 'required|string|unique:personals,ci',
+            'personal.celular'   => 'nullable|string|max:20',
         ]);
 
+        // Crear el registro de Personal primero
+        $personal = Personal::create([
+            'nombres'   => $validated['personal']['nombres'],
+            'apellidos' => $validated['personal']['apellidos'],
+            'ci'        => $validated['personal']['ci'],
+            'celular'   => $validated['personal']['celular'] ?? null,
+            'estado'    => true,
+        ]);
+
+        // Crear el usuario con el personal_id
         $validated['password'] = Hash::make($validated['password']);
         $validated['estado']   = $validated['estado'] ?? true;
+        $validated['personal_id'] = $personal->id;
+
+        // Remover los datos de personal del array validated
+        unset($validated['personal']);
 
         $user = User::create($validated);
         $user->load('rol', 'personal');
@@ -74,7 +92,7 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $validated = $request->validate([
-            'name'        => 'required|string|max:255',
+            'name'        => 'nullable|string|max:255',
             'usuario'     => [
                 'required',
                 'string',
@@ -88,10 +106,42 @@ class UserController extends Controller
                 Rule::unique('users', 'email')->ignore($user->id),
             ],
             'rol_id'      => 'required|exists:rols,id',
-            'personal_id' => 'nullable|exists:personals,id',
             'estado'      => 'boolean',
             'password'    => 'nullable|string|min:6',
+            // Datos de Personal
+            'personal.nombres'   => 'required|string|max:255',
+            'personal.apellidos' => 'required|string|max:255',
+            'personal.ci'        => [
+                'required',
+                'string',
+                Rule::unique('personals', 'ci')->ignore($user->personal_id),
+            ],
+            'personal.celular'   => 'nullable|string|max:20',
         ]);
+
+        // Actualizar o crear Personal
+        if ($user->personal_id) {
+            // Actualizar Personal existente
+            $user->personal->update([
+                'nombres'   => $validated['personal']['nombres'],
+                'apellidos' => $validated['personal']['apellidos'],
+                'ci'        => $validated['personal']['ci'],
+                'celular'   => $validated['personal']['celular'] ?? null,
+            ]);
+        } else {
+            // Crear nuevo Personal
+            $personal = Personal::create([
+                'nombres'   => $validated['personal']['nombres'],
+                'apellidos' => $validated['personal']['apellidos'],
+                'ci'        => $validated['personal']['ci'],
+                'celular'   => $validated['personal']['celular'] ?? null,
+                'estado'    => true,
+            ]);
+            $validated['personal_id'] = $personal->id;
+        }
+
+        // Remover los datos de personal del array validated
+        unset($validated['personal']);
 
         if (!empty($validated['password'])) {
             $validated['password'] = Hash::make($validated['password']);
@@ -125,6 +175,20 @@ class UserController extends Controller
         return response()->json([
             'message' => 'Estado de usuario actualizado',
             'data'    => $user,
+        ]);
+    }
+
+    public function resetPassword(User $user)
+    {
+        // Resetear contraseña a: {usuario}123
+        $newPassword = $user->usuario . '123';
+        $user->password = Hash::make($newPassword);
+        $user->password_changed_at = null; // Forzar cambio de contraseña en próximo login
+        $user->save();
+
+        return response()->json([
+            'message' => 'Contraseña reseteada correctamente',
+            'new_password' => $newPassword,
         ]);
     }
 }

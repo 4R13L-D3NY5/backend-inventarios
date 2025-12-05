@@ -11,7 +11,7 @@ class AuthController extends Controller
 {
     public function me(Request $request)
     {
-        $user = $request->user()?->load('rol', 'personal');
+        $user = $request->user()?->load('rol.permisos', 'personal');
 
         if (!$user) {
             return response()->json([
@@ -19,8 +19,14 @@ class AuthController extends Controller
             ], 401);
         }
 
+        // Obtener permisos del rol
+        $permissions = $user->rol && $user->rol->permisos
+            ? $user->rol->permisos->pluck('clave')->toArray()
+            : [];
+
         return response()->json([
             'user'             => $user,
+            'permissions'      => $permissions,
             'password_changed' => (bool) $user->password_changed_at,
         ]);
     }
@@ -41,13 +47,19 @@ class AuthController extends Controller
         }
 
         /** @var \App\Models\User $user */
-        $user = Auth::user()->load('rol', 'personal');
+        $user = Auth::user()->load('rol.permisos', 'personal');
 
         $token = $user->createToken('api')->plainTextToken;
+
+        // Obtener permisos del rol
+        $permissions = $user->rol && $user->rol->permisos
+            ? $user->rol->permisos->pluck('clave')->toArray()
+            : [];
 
         return response()->json([
             'token'            => $token,
             'user'             => $user,
+            'permissions'      => $permissions,
             'password_changed' => (bool) $user->password_changed_at,
         ]);
     }

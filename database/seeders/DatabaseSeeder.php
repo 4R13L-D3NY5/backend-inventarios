@@ -22,6 +22,8 @@ use App\Models\MovimientoInventario;
 use App\Models\Prestamo;
 use App\Models\OrdenCompra;
 use App\Models\OrdenCompraItem;
+use App\Models\Solicitud;
+use App\Models\SolicitudItem;
 
 
 class DatabaseSeeder extends Seeder
@@ -759,7 +761,10 @@ class DatabaseSeeder extends Seeder
             $orden->calcularTotales();
         }
 
-        $this->command->info('✅ Seeders completados: Usuarios, Proveedores, Categorías, Laboratorios, Ubicaciones, Almacenes y Órdenes de Compra');
+        // Llamar al seeder de Solicitudes
+        $this->call(SolicitudesSeeder::class);
+
+        $this->command->info('✅ Seeders completados: Usuarios, Proveedores, Categorías, Laboratorios, Ubicaciones, Almacenes, Órdenes de Compra y Solicitudes');
 
     }
 }

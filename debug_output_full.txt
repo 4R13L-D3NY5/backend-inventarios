@@ -1,0 +1,1 @@
+﻿ERROR_MSG: SQLSTATE[HY000] [2002] No se puede establecer una conexi├│n ya que el equipo de destino deneg├│ expresamente dicha conexi├│n (Connection: mysql, SQL: select * from `inventarios` where `cantidad_actual` > 0)
